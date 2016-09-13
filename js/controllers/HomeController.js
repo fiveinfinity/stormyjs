@@ -20,13 +20,8 @@ function HomeController($scope, uiGmapGoogleMapApi, uiGmapIsReady, MapsService, 
 
     //Instantiates the directions map upon form submission.
     ctrl.directions = function() {
-        //resets markers
-        var currentMarkers = MapsService.getMarkers();
-        for (var i = 0; i < currentMarkers.length; i++) {
-          currentMarkers[i].setMap(null);
-        }
+        resetMarkers();
 
-        MapsService.clearMarkers();
         uiGmapIsReady.promise(1).then(function(instances) {
             ctrl.map = instances[0].map;
             ctrl.directionsDisplay.setMap(ctrl.map);
@@ -36,20 +31,27 @@ function HomeController($scope, uiGmapGoogleMapApi, uiGmapIsReady, MapsService, 
 
     //Calls Google Maps API and returns directions. ctrl.weatherPoint is the object that stores the markers.
     ctrl.createDirections = function(directionsService, maps) {
-        var hour = TimeService.militaryTime(ctrl.hour, ctrl.period); //16
-        var UTCDate = ctrl.week[ctrl.day]; //UTC date
-        var date = TimeService.dateParser(UTCDate); //2016-7-10
+        //returns a hash with UTC time, common date, military time, and unix time.
+        var timeFormats = TimeService.allTimeFormats(ctrl.hour, ctrl.period, ctrl.week, ctrl.day);
 
-        directionsService.route(MapsService.directionParams(ctrl.origin, ctrl.destination, maps, date, hour),
+        directionsService.route(MapsService.directionParams(ctrl.origin, ctrl.destination, maps, timeFormats),
             function(response, status) {
                 if (status == maps.DirectionsStatus.OK) {
                     ctrl.directionsDisplay.setDirections(response);
 
                     //a hash of all the markers for the route
-                    var markers = MapsService.createMarkers(response, maps, ctrl.map);
-                    var waypointTimes = TimeService.setWaypointTimes(response, markers, date, hour);
-                    ctrl.markers = waypointTimes;
+                    MapsService.createMarkers(response, maps, ctrl.map);
+                    // TimeService.setWaypointTimes(response, markers, date, hour);
+                    // ctrl.markers = waypointTimes;
+
                 }
             });
+    }
+
+    var resetMarkers = function() {
+        var currentMarkers = MapsService.getMarkers();
+        for (var i = 0; i < currentMarkers.length; i++) {
+          currentMarkers[i].setMap(null);
+        }
     }
 }

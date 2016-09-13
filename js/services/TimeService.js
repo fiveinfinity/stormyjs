@@ -52,13 +52,24 @@ function TimeService() {
         return day;
     }
 
+    this.allTimeFormats = function(hour, period, week, day) {
+        var timeFormats = {};
+
+        timeFormats['militaryTime'] = militaryTime(hour, period);
+        timeFormats['UTC'] = week[day];
+        timeFormats['UNIX'] = Math.floor(Date.parse(week[day])/1000);
+        timeFormats['commonDate'] = dateParser(week[day]);
+
+        return timeFormats;
+    }
+
     // takes the hour and period and returns military time.
-    this.militaryTime = function(hour, period) {
+    var militaryTime = function(hour, period) {
         return period === "AM" ? parseInt(hour) : (parseInt(hour) + 12);
     }
 
-    //takes UTC and returns 'YYYY-MM-DD' string
-    this.dateParser = function(UTCdate) {
+    //takes UTC and returns 'YYYY-MM-DD' string. Need to do this to include the future time for trip as a new UTC.
+    var dateParser = function(UTCdate) {
         var day = UTCdate.getDate();
         var month = UTCdate.getMonth();
         var year = UTCdate.getFullYear();
