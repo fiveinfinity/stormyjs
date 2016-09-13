@@ -1,0 +1,26 @@
+<div id="mySidenav" class="sidenav form-group">
+<form name="form" ng-submit="home.directions()" style="padding-top:120px" class="form-group">
+<input type="text" name="origin" ng-model="home.origin" placeholder="origin" class="form-control" style="width: 90%; margin-left: 8px"/><br>
+<input type="text" name="destination" ng-model="home.destination" placeholder="destination" class="form-control" style="width: 90%; margin-left: 8px"/><br>
+
+<div ng-repeat="(day, utc) in home.week" class="btn-group">
+  <label class="btn btn-primary" ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</label>
+</div><br>
+
+<div ng-repeat="hour in home.hours" class="btn-group">
+  <label class="btn btn-primary" ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</label>
+</div><br>
+
+<div ng-repeat="period in home.timePeriod" class="btn-group">
+  <label class="btn btn-primary" ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</label>
+</div><br>
+
+<input type="submit" name="submit" class="btn btn-primary" value="Get Your Stormy On" style="width: 90%; margin-left: 8px">
+</form>
+</div>
+
+<img class="logo" src="images/stormy.png" alt="How's the weather over there?">
+
+<div id="main">
+  <ui-gmap-google-map center='map.center' zoom='map.zoom' control='map.control'></ui-gmap-google-map>
+</div>

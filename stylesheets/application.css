@@ -1,0 +1,85 @@
+html, body {
+ height: 100%;
+ margin: 0;
+}
+
+#main,
+.angular-google-map-container {
+ height: 100%;
+ width: 90%;
+ margin-left: 10%;
+ position: absolute;
+ top: 0;
+ left: 0;
+}
+
+.logo {
+ height: auto;
+ width: 15%;
+ position: absolute;
+ z-index: 1;
+ top: 15px;
+ left: 0;
+ margin: auto 25px;
+ animation: fadein 3s;
+   -moz-animation: fadein 3s; /* Firefox */
+   -webkit-animation: fadein 3s; /* Safari and Chrome */
+   -o-animation: fadein 3s; /* Opera */
+
+}
+
+/* The side navigation menu */
+.sidenav {
+   height: 100%;
+   width: 20%;
+   max-width: 20%;
+   position: fixed;
+   top: 0;
+   left: 0;
+   background-color: #333;
+   padding-top: 0px;
+   transition: 0.5s;
+   animation: fadein 3s;
+     -moz-animation: fadein 3s; /* Firefox */
+     -webkit-animation: fadein 3s; /* Safari and Chrome */
+     -o-animation: fadein 3s; /* Opera */
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+/*@media screen and (max-height: 450px) {
+   .sidenav {padding-top: 15px;}
+   .sidenav a {font-size: 18px;}
+}*/
+
+@keyframes fadein {
+   from {
+       opacity:0;
+   }
+   to {
+       opacity:1;
+   }
+}
+@-moz-keyframes fadein { /* Firefox */
+   from {
+       opacity:0;
+   }
+   to {
+       opacity:1;
+   }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+   from {
+       opacity:0;
+   }
+   to {
+       opacity:1;
+   }
+}
+@-o-keyframes fadein { /* Opera */
+   from {
+       opacity:0;
+   }
+   to {
+       opacity: 1;
+   }
+}
