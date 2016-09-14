@@ -9,7 +9,7 @@
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="(day, utc) in home.week" >
-          <li ng-click="home.dayClick()" ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</li>
+          <li style="padding: 10px;" ng-click="home.dayClick()" ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</li>
         </div>
       </ul><br>
     </div>
@@ -22,7 +22,7 @@
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="hour in home.hours">
-          <li ng-click="home.hourClick()" ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</li>
+          <li style="padding: 5px;" ng-click="home.hourClick()" ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</li>
         </div>
       </ul><br>
     </div>
@@ -33,7 +33,7 @@
       </button><br>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="period in home.timePeriod">
-          <li ng-click="home.periodClick()" ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</li>
+          <li style="padding: 10px;" ng-click="home.periodClick()" ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</li>
         </div>
       </ul><br>
     </div>
