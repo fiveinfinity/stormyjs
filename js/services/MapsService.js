@@ -7,6 +7,32 @@ MapsService.$inject = ['TimeService', 'WeatherService'];
 function MapsService(TimeService, WeatherService) {
     var currentMarkers = [];
 
+    function newMarker(lat, lng, map, maps, forecast, infowindow) {
+        var weatherIcon = judgeForecast(forecast);
+        var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 45)};
+        var newMarker = new maps.Marker({position: {lat, lng}, map: map, icon: icon});
+        newMarker.addListener('click', function() {
+            infowindow.setOptions({content: forecast['summary']});
+            infowindow.open(map, newMarker);
+        });
+        currentMarkers.push(newMarker);
+    }
+
+    this.createMarkers = function(response, maps, map, timeFormats) {
+        var markers;
+        var infowindow = new maps.InfoWindow();
+        var distanceInMeters = response['routes'][0]['legs'][0]['distance']['value'];
+        var distanceInMiles = toMiles(distanceInMeters);
+        var routePoints = response['routes'][0]['overview_path'];
+        var cadence = getCadence(distanceInMiles);
+
+        for (j = cadence; j < routePoints.length; j += cadence) {
+            lat = routePoints[j].lat();
+            lng = routePoints[j].lng();
+            getWeather(lat, lng, timeFormats, map, maps, infowindow);
+        }
+    }
+
     this.directionParams = function(origin, destination, maps, timeFormats) {
         return {
             origin: origin,
@@ -20,58 +46,34 @@ function MapsService(TimeService, WeatherService) {
         }
     }
 
-    function newMarker(lat, lng, map, maps, markers) {
-        var icon = {url: 'images/greenmarker.png', scaledSize: new maps.Size(35, 45)};
-        var weather = markers[0][5];
-        var infowindow = new maps.InfoWindow({content: weather});
-        var newMarker = new maps.Marker({position: {lat, lng}, map: map, icon: icon});
-        newMarker.addListener('click', function() {
-            infowindow.open(map, newMarker);
-        });
-        currentMarkers.push(newMarker);
-        return newMarker;
-    }
-
     this.getMarkers = function() {
         return currentMarkers;
     }
 
-    //creates markers based on overview_path waypoints in the Google Maps Directions response.
-    this.createMarkers = function(response, maps, map) {
-        var markers = {};
-        var distanceInMeters = response['routes'][0]['legs'][0]['distance']['value'];
-        var distanceInMiles = toMiles(distanceInMeters);
-        var routePoints = response['routes'][0]['overview_path'];
-        var cadence = getCadence(distanceInMiles);
+    function getWeather(lat, lng, timeFormats, map, maps, infowindow) {
+        var forecast;
 
-        var i = 0;
-        for (j = cadence; j < routePoints.length; j += cadence) {
-            var lat = routePoints[j].lat();
-            var lng = routePoints[j].lng();
-
-            // var geo = WeatherService.geoLookup(lat, lng, maps);
-            // var marker = newMarker(lat, lng, map, maps);
-            //add 'geo' and 'marker' to the array below when app is ready.
-
-            var weather = WeatherService.getWeather(lat, lng);
-            markers[i] = [lat, lng];
-            i++;
-        }
-        console.log(markers)
-        //the next lines to the return are for testing to keep API calls to a min, use the commented line for app.
-        var geo = WeatherService.geoLookup(markers[0][0], markers[0][1], maps);
-        geo.then(function(data) {
-            var city = data['data']['location']['city'];
-            var state = data['data']['location']['state'];
-            markers[0].push(city);
-            markers[0].push(state);
-            var weather = WeatherService.getWeather(city, state);
-            weather.then(function(data) {
-                markers[0].push(data['data']['hourly_forecast'][0]['condition']);
-                var marker = newMarker(markers[0][0], markers[0][1], map, maps, markers)
-            });
+        WeatherService.getWeather(lat, lng)
+          .then(function(data) {
+            if(timeFormats['dayOfWeek'] === 'Today') {
+                forecast = data['data']['hourly']['data'][hoursIntoFutureFromToday(timeFormats)];
+                newMarker(lat, lng, map, maps, forecast, infowindow)
+            } else if(timeFormats['dayOfWeek'] === 'Tomorrow') {
+                forecast = data['data']['hourly']['data'][hoursIntoFutureFromTomorrow(timeFormats)];
+                newMarker(lat, lng, map, maps, forecast, infowindow)
+            } else {
+                forecast = data['data']['daily']['data'][timeFormats['dayInt']];
+                newMarker(lat, lng, map, maps, forecast, infowindow)
+            }
         });
-        return markers;
+    }
+
+    function judgeForecast(forecast) {
+        if(forecast['summary'] === 'Thunderstorm') {
+            return 'images/redmarker.png';
+        } else {
+            return 'images/greenmarker.png';
+        }
     }
 
     function toMiles(meters) {
@@ -80,14 +82,24 @@ function MapsService(TimeService, WeatherService) {
 
     function getCadence(miles) {
         if(miles < 100) {
-            return 90;
-        } else if(miles > 100 && miles < 500) {
             return 60;
+        } else if(miles > 100 && miles < 500) {
+            return 40;
         } else if(miles > 500 && miles < 1500){
-            return 30;
-        } else {
             return 20;
+        } else {
+            return 10;
         }
+    }
+
+    function hoursIntoFutureFromToday(timeFormats) {
+        var currentHour = new Date(Date.now()).getHours();
+        return (timeFormats['militaryTime'] - currentHour)-1;
+    }
+
+    function hoursIntoFutureFromTomorrow(timeFormats) {
+        var currentHour = new Date(Date.now()).getHours();
+        return ((timeFormats['militaryTime'] + 24) - currentHour)-1;
     }
 
 }

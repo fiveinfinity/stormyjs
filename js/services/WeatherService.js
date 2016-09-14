@@ -11,7 +11,7 @@ function WeatherService($http) {
     }
 
     //SWITCH TO DARK SKY
-    this.getWeather = function(city, state) {
-        return $http.get('https://crossorigin.me/http://api.wunderground.com/api/b924e5e377465063/hourly10day/q/'+state+'/'+city+'.json')
+    this.getWeather = function(lat, lng) {
+        return $http.get('https://crossorigin.me/https://api.forecast.io/forecast/a56904ad029a4da12a16be1a4dc68cbe/'+ lat +','+ lng +'?UNITS=us')
     }
 }

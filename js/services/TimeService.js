@@ -18,7 +18,7 @@ function TimeService() {
             } else {
                 day = getDay(dayInt);
             }
-            weekdays[day] = UTC;
+            weekdays[day] = [UTC, dayInt];
             UTC = new Date(UTC.getTime() + 86400000);
             dayInt == 6 ? dayInt = 0 : dayInt++;
         }
@@ -56,9 +56,11 @@ function TimeService() {
         var timeFormats = {};
 
         timeFormats['militaryTime'] = militaryTime(hour, period);
-        timeFormats['UTC'] = week[day];
+        timeFormats['UTC'] = week[day][0];
         timeFormats['UNIX'] = Math.floor(Date.parse(week[day])/1000);
-        timeFormats['commonDate'] = dateParser(week[day]);
+        timeFormats['commonDate'] = dateParser(week[day][0]);
+        timeFormats['dayOfWeek'] = day;
+        timeFormats['dayInt'] = week[day][1];
 
         return timeFormats;
     }

@@ -33,14 +33,13 @@ function HomeController($scope, uiGmapGoogleMapApi, uiGmapIsReady, MapsService, 
     ctrl.createDirections = function(directionsService, maps) {
         //returns a hash with UTC time, common date, military time, and unix time.
         var timeFormats = TimeService.allTimeFormats(ctrl.hour, ctrl.period, ctrl.week, ctrl.day);
+        var infoWindow;
 
         directionsService.route(MapsService.directionParams(ctrl.origin, ctrl.destination, maps, timeFormats),
             function(response, status) {
                 if (status == maps.DirectionsStatus.OK) {
                     ctrl.directionsDisplay.setDirections(response);
-
-                    //a hash of all the markers for the route
-                    MapsService.createMarkers(response, maps, ctrl.map);
+                    MapsService.createMarkers(response, maps, ctrl.map, timeFormats);
                     // TimeService.setWaypointTimes(response, markers, date, hour);
                     // ctrl.markers = waypointTimes;
 
