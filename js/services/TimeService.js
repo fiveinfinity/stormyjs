@@ -3,28 +3,6 @@ angular
     .service('TimeService', TimeService);
 
 function TimeService() {
-    // returns a hash with the weekday as the key, and the UTC date as the value.
-    this.nextSevenDays = function() {
-        var UTC = new Date(Date.now());
-        var dayInt = UTC.getDay();
-        var weekdays = {};
-        var day = '';
-
-        for (i = 0; i < 7; i++) {
-            if (i === 0) {
-                day = "Today";
-            } else if (i === 1) {
-                day = "Tomorrow";
-            } else {
-                day = getDay(dayInt);
-            }
-            weekdays[day] = [UTC, dayInt];
-            UTC = new Date(UTC.getTime() + 86400000);
-            dayInt == 6 ? dayInt = 0 : dayInt++;
-        }
-        return weekdays;
-    }
-
     //given the day integer, returns the day of the week.
     var getDay = function(int) {
         switch (int) {
@@ -52,19 +30,6 @@ function TimeService() {
         return day;
     }
 
-    this.allTimeFormats = function(hour, period, week, day) {
-        var timeFormats = {};
-
-        timeFormats['militaryTime'] = militaryTime(hour, period);
-        timeFormats['UTC'] = week[day][0];
-        timeFormats['UNIX'] = Math.floor(Date.parse(week[day])/1000);
-        timeFormats['commonDate'] = dateParser(week[day][0]);
-        timeFormats['dayOfWeek'] = day;
-        timeFormats['dayInt'] = week[day][1];
-
-        return timeFormats;
-    }
-
     // takes the hour and period and returns military time.
     var militaryTime = function(hour, period) {
         return period === "AM" ? parseInt(hour) : (parseInt(hour) + 12);
@@ -79,31 +44,47 @@ function TimeService() {
         return year + '-' + month + '-' + day;
     }
 
-    //takes an object with coords for each waypoint and adds the appropriate time value to each waypoint.
-    this.setWaypointTimes = function(response, markers, date, hour) {
-        var duration = response['routes'][0]['legs'][0]['duration']['value'];
-        var markerCount = Object.keys(markers).length;
-        var markerTimeInterval = Math.floor(duration / markerCount);
-        var timeInterval = markerTimeInterval;
-        var adjustedTime = getWaypointUTCTime(timeInterval);
-        var adjustedHour = adjustedTime[0] + hour;
+    // returns a hash with the weekday as the key, and the UTC date as the value.
+    this.nextSevenDays = function() {
+        var UTC = new Date(Date.now());
+        var dayInt = UTC.getDay();
+        var weekdays = {};
+        var day = '';
 
-        for (var marker in markers) {
-            markers[marker].push(timeInterval);
-            timeInterval += markerTimeInterval;
+        for (i = 0; i < 7; i++) {
+            if (i === 0) {
+                day = "Today";
+            } else if (i === 1) {
+                day = "Tomorrow";
+            } else {
+                day = getDay(dayInt);
+            }
+            weekdays[day] = [UTC, dayInt];
+            UTC = new Date(UTC.getTime() + 86400000);
+            dayInt == 6 ? dayInt = 0 : dayInt++;
         }
-        return markers;
+        return weekdays;
     }
 
-    //params are YYYY-MM-DD and military time, and interval in seconds.
-    var getWaypointUTCTime = function(interval) {
+    this.allTimeFormats = function(hour, period, week, day) {
+        var timeFormats = {};
+
+        timeFormats['militaryTime'] = militaryTime(hour, period);
+        timeFormats['UTC'] = week[day][0];
+        timeFormats['UNIX'] = Math.floor(Date.parse(week[day])/1000);
+        timeFormats['commonDate'] = dateParser(week[day][0]);
+        timeFormats['dayOfWeek'] = day;
+        timeFormats['dayInt'] = week[day][1];
+
+        return timeFormats;
+    }
+
+    this.getAccruedTripHours = function(interval) {
         hourIncrements = 0;
-        //interval in minutes, rounded down
-        intervalTime = Math.floor(interval / 60);
-        while (intervalTime > 60) {
-            intervalTime -= 60;
+        while (interval > 60) {
+            interval -= 60;
             hourIncrements++;
         }
-        return [hourIncrements, intervalTime];
+        return hourIncrements;
     }
 }

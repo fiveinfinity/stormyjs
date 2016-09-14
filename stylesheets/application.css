@@ -64,6 +64,9 @@ html, body {
   position: absolute;
   width: 90%;
   margin-left: 15px;
+  color: #111;
+  font-family: Raleway;
+  background-color: #F55;
 }
 
 p {
