@@ -9,7 +9,7 @@ function MapsService(TimeService, WeatherService) {
 
     var newMarker = function(lat, lng, map, maps, forecast, infowindow) {
         var weatherIcon = judgeForecast(forecast);
-        var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 45)};
+        var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 35)};
         var newMarker = new maps.Marker({position: {lat, lng}, map: map, icon: icon});
         newMarker.addListener('click', function() {
             infowindow.setOptions({content: forecast['summary']});
@@ -43,7 +43,7 @@ function MapsService(TimeService, WeatherService) {
         if(forecast['summary'] === 'Thunderstorm') {
             return 'images/redmarker.png';
         } else {
-            return 'images/greenmarker.png';
+            return 'images/pc.png';
         }
     }
 
@@ -53,13 +53,13 @@ function MapsService(TimeService, WeatherService) {
 
     var getCadence = function(miles) {
         if(miles < 100) {
-            return 60;
+            return 90;
         } else if(miles > 100 && miles < 500) {
-            return 40;
+            return 60;
         } else if(miles > 500 && miles < 1500){
-            return 20;
+            return 30;
         } else {
-            return 10;
+            return 20;
         }
     }
 
