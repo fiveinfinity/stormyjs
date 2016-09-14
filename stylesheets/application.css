@@ -1,6 +1,7 @@
 html, body {
  height: 100%;
  margin: 0;
+ margin-bottom: 40px;
 }
 
 #main,
@@ -50,6 +51,21 @@ html, body {
       background-color: lightgray;
 }
 
+#go {
+  background-color: green;
+  border-color: green;
+}
+
+#info {
+  padding-top: 70px;
+}
+
+#alert {
+  position: absolute;
+  width: 90%;
+  margin-left: 15px;
+}
+
 p {
   font-family: 'Raleway';
   color: #999;
@@ -57,11 +73,12 @@ p {
 
 .footer {
   position: fixed;
-  padding-top: 130px;
+  padding-top: 50px;
   padding-left: 15px;
   width: 19%;
   max-width: 19%;
   font-size: .7em;
+  margin-bottom:0px;
 }
 
 #divider {

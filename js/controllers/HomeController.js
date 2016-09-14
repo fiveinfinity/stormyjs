@@ -6,9 +6,46 @@ HomeController.$inject = ['$scope', 'uiGmapGoogleMapApi', 'uiGmapIsReady', 'Maps
 
 function HomeController($scope, uiGmapGoogleMapApi, uiGmapIsReady, MapsService, TimeService, WeatherService, week) {
     var ctrl = this;
+    var dayGreeting = 'What Day are you leaving?';
+    var hourGreeting = '...and what time?';
+    var periodGreeting = 'Morning or Evening?';
     ctrl.week = week;
     ctrl.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     ctrl.timePeriod = ['AM', 'PM']
+    ctrl.day = dayGreeting;
+    ctrl.hour = hourGreeting;
+    ctrl.period = periodGreeting;
+    ctrl.dayClick = function() {
+        if(ctrl.day != dayGreeting) {
+            ctrl.dayCSS = 'go';
+        }
+    }
+
+    ctrl.hourClick = function() {
+        if(ctrl.hour != hourGreeting) {
+            ctrl.hourCSS = 'go';
+        }
+    }
+
+    ctrl.periodClick = function() {
+        if(ctrl.period != periodGreeting) {
+            ctrl.periodCSS = 'go';
+        }
+    }
+
+    ctrl.submitClick = function() {
+        if(ctrl.day == dayGreeting || ctrl.hour == hourGreeting || ctrl.period == periodGreeting || ctrl.origin == undefined || ctrl.destination == undefined) {
+            ctrl.well = 'well';
+            ctrl.alert = 'alert';
+            ctrl.alertMessage = "We aren't mind readers over here. Make all the boxes turn green!"
+        } else {
+            ctrl.well = undefined;
+            ctrl.alert = undefined;
+            ctrl.alertMessage = undefined;
+            ctrl.submitCSS = 'go';
+        }
+    }
+
     $scope.map = {center: {latitude: 37.09024, longitude: -95.712891}, zoom: 4, control: {}};
 
     //Instantiates a new Google Maps object.

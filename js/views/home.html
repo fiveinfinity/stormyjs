@@ -1,15 +1,15 @@
 <div id="mySidenav" class="sidenav form-group">
   <form name="form" ng-submit="home.directions()" style="padding-top:120px">
-    <input type="text" name="origin" ng-model="home.origin" placeholder="ORIGIN" class="textarea" style="width: 90%; margin-left: 15px"/><br><br>
-    <input type="text" name="destination" ng-model="home.destination" placeholder="DESTINATION" class="textarea" style="width: 90%; margin-left: 15px"/><br><br>
+    <input type="text" name="origin" ng-model="home.origin" placeholder="Where are you right meow?" class="textarea" style="width: 90%; margin-left: 15px"/><br><br>
+    <input type="text" name="destination" ng-model="home.destination" placeholder="...and where are you going?" class="textarea" style="width: 90%; margin-left: 15px"/><br><br>
 
     <div uib-dropdown is-open="home.status.isopen1">
-      <button class="button button-primary" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
-        Day of the Week: {{home.day}} <span class="caret"/>
+      <button class="button button-primary" id="{{home.dayCSS}}" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
+        {{home.day}} <span class="caret"/>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="(day, utc) in home.week" >
-          <li ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</li>
+          <li ng-click="home.dayClick()" ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</li>
         </div>
       </ul><br>
     </div>
@@ -17,42 +17,48 @@
 
 
     <div uib-dropdown is-open="home.status.isopen2">
-      <button class="button button-primary" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
-        Hour of Departure: {{home.hour}} <span class="caret"/>
+      <button class="button button-primary" id="{{home.hourCSS}}" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
+        {{home.hour}} <span class="caret"/>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="hour in home.hours">
-          <li ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</li>
+          <li ng-click="home.hourClick()" ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</li>
         </div>
       </ul><br>
     </div>
 
     <div uib-dropdown is-open="home.status.isopen3">
-      <button class="button button-primary" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
-        AM or PM: {{home.period}} <span class="caret"/>
+      <button class="button button-primary" id="{{home.periodCSS}}" style="width: 90%; margin-left: 15px" uib-dropdown-toggle ng-disabled="disabled">
+        {{home.period}} <span class="caret"/>
       </button><br>
       <ul class="dropdown-menu" uib-dropdown-menu style="width: 90%; margin-left: 15px">
         <div ng-repeat="period in home.timePeriod">
-          <li ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</li>
+          <li ng-click="home.periodClick()" ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</li>
         </div>
       </ul><br>
     </div>
 
-    <input type="submit" name="submit" class="button button-primary" value="CALCULATE TRIP WEATHER" style="width: 90%; margin-left: 15px">
+    <input type="submit" name="submit" ng-click="home.submitClick()" id="{{home.submitCSS}}" class="button button-primary" value="CALCULATE TRIP WEATHER" style="width: 90%; margin-left: 15px">
 
+    <div class="{{home.well}}" id="{{home.alert}}">
+      {{home.alertMessage}}
+    </div>
 
   </form>
-  <h3 style="color: #999; margin: 0 15px; font-family: 'Raleway';">What's Stormy?</h3><br>
-  <p style="margin: 0 15px;">Stormy is software that knows if there will be any
-    inclement weather in your trip exactly at the time you'll be passing through. As we all
-    know weather forecasts can change, Stormy is more accurate the closer you are to leaving
-    for your trip.
-  </p>
+  <div id="info">
+    <h3 style="color: #999; margin: 0 15px; font-family: 'Raleway';">What's Stormy?</h3><br>
+    <p style="margin: 0 15px;">Stormy is software that knows if there will be any
+      inclement weather in your trip exactly at the time you'll be passing through. As we all
+      know weather forecasts can change, Stormy is more accurate the closer you are to leaving
+      for your trip.
+    </p>
+  </div>
+
 
   <div class="footer">
     <hr id="divider">
     <p>MADE WITH <i class="fa fa-heart" aria-hidden="true" style="color: #F55;"></i> // JOE LACHANCE, <i class="fa fa-copyright" aria-hidden="true"></i> 2016.</p>
-    <p><i class="fa fa-github" aria-hidden="true"></i> <a href="https://github.com/fiveinfinity/stormyjs">Source on Github</a></p>
+    <p><i class="fa fa-github" aria-hidden="true"></i> <a target="_blank" href="https://github.com/fiveinfinity/stormyjs">Source on Github</a></p>
   </div>
 </div>
 
