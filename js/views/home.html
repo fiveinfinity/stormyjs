@@ -1,22 +1,43 @@
 <div id="mySidenav" class="sidenav form-group">
-<form name="form" ng-submit="home.directions()" style="padding-top:120px" class="form-group">
-<input type="text" name="origin" ng-model="home.origin" placeholder="origin" class="form-control" style="width: 90%; margin-left: 8px"/><br>
-<input type="text" name="destination" ng-model="home.destination" placeholder="destination" class="form-control" style="width: 90%; margin-left: 8px"/><br>
+  <form name="form" ng-submit="home.directions()" style="padding-top:120px" class="form-group">
+    <input type="text" name="origin" ng-model="home.origin" placeholder="origin" class="form-control" style="width: 90%; margin-left: 8px"/><br>
+    <input type="text" name="destination" ng-model="home.destination" placeholder="destination" class="form-control" style="width: 90%; margin-left: 8px"/><br>
 
-<div ng-repeat="(day, utc) in home.week" class="btn-group">
-  <label class="btn btn-primary" ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</label>
-</div><br>
+    <div class="btn-group" uib-dropdown is-open="home.status.isopen1">
+      <button class="btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Day of the week: {{home.day}} <span class="caret"/>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <div ng-repeat="(day, utc) in home.week">
+          <li ng-model="home.day" uib-btn-radio="'{{day}}'">{{day}}</li>
+        </div>
+      </ul>
+    </div>
 
-<div ng-repeat="hour in home.hours" class="btn-group">
-  <label class="btn btn-primary" ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</label>
-</div><br>
+    <div class="btn-group" uib-dropdown is-open="home.status.isopen2">
+      <button class="btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        Hour of Departure: {{home.hour}} <span class="caret"/>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <div ng-repeat="hour in home.hours">
+          <li ng-model="home.hour" uib-btn-radio="'{{hour}}'">{{hour}}</li>
+        </div>
+      </ul>
+    </div>
 
-<div ng-repeat="period in home.timePeriod" class="btn-group">
-  <label class="btn btn-primary" ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</label>
-</div><br>
+    <div class="btn-group" uib-dropdown is-open="home.status.isopen3">
+      <button class="btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+        AM or PM: {{home.period}} <span class="caret"/>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <div ng-repeat="period in home.timePeriod">
+          <li ng-model="home.period" uib-btn-radio="'{{period}}'">{{period}}</li>
+        </div>
+      </ul>
+    </div>
 
-<input type="submit" name="submit" class="btn btn-primary" value="Get Your Stormy On" style="width: 90%; margin-left: 8px">
-</form>
+    <input type="submit" name="submit" class="btn btn-primary" value="Get Your Stormy On" style="width: 90%; margin-left: 8px">
+  </form>
 </div>
 
 <img class="logo" src="images/stormy.png" alt="How's the weather over there?">

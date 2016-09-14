@@ -53,4 +53,10 @@ function HomeController($scope, uiGmapGoogleMapApi, uiGmapIsReady, MapsService, 
           currentMarkers[i].setMap(null);
         }
     }
+
+    this.status = {
+        isopen1: false,
+        isopen2: false,
+        isopen3: false
+    }
 }
