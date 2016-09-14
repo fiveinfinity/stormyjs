@@ -1,6 +1,6 @@
 angular
     .module('app', ['ui.router', 'uiGmapgoogle-maps', 'ui.bootstrap'])
-    .config(function($stateProvider, uiGmapGoogleMapApiProvider) {
+    .config(function($stateProvider) {
         $stateProvider
             .state('home', {
                 url: '/',
@@ -12,9 +12,4 @@ angular
                     }
                 }
             });
-        uiGmapGoogleMapApiProvider.configure({
-            // key: 'AIzaSyDoHFpligHoNQ_2WZudFcGJqBVbWBWFqns',
-            v: '3.exp',
-            libraries: 'geometry, visualization, places'
-        });
     });
