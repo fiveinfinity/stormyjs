@@ -1,6 +1,6 @@
 angular
     .module('app', ['ui.router', 'uiGmapgoogle-maps', 'ui.bootstrap'])
-    .config(function($stateProvider) {
+    .config(function($stateProvider, $locationProvider) {
         $stateProvider
             .state('home', {
                 url: '/',
@@ -12,4 +12,5 @@ angular
                     }
                 }
             });
+        $locationProvider.html5Mode(true);
     });
