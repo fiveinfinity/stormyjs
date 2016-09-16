@@ -7,8 +7,9 @@ MapsService.$inject = ['TimeService', 'WeatherService'];
 function MapsService(TimeService, WeatherService) {
     var currentMarkers = [];
 
-    function newMarker(lat, lng, map, maps, forecast, infowindow) {
-        var markerContent = getForecastContent(forecast);
+    function newMarker(lat, lng, map, maps, forecast, infowindow, temp=true) {
+        console.log(temp);
+        var markerContent = getForecastContent(forecast, temp);
         var weatherIcon = judgeForecast(forecast);
         var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 35)};
         var newMarker = new maps.Marker({position: {lat, lng}, map: map, icon: icon});
@@ -19,56 +20,60 @@ function MapsService(TimeService, WeatherService) {
         currentMarkers.push(newMarker);
     }
 
-    function getWeather(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime) {
+    function getWeather(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime, markerCount) {
         var forecast;
         var additionalHours = TimeService.getAccruedTripHours(accruedTripTime);
         var todayStartTime = hoursIntoFutureFromToday(timeFormats);
         var tomorrowStartTime = hoursIntoFutureFromTomorrow(timeFormats);
+        var temp = false;
 
         WeatherService.getWeather(lat, lng)
           .then(function(data) {
-            if(timeFormats['dayOfWeek'] === 'Today') {
+            if(timeFormats['dayOfWeek'] === 'Today' && (todayStartTime + additionalHours) < 48) {
                 forecast = data['data']['hourly']['data'][todayStartTime + additionalHours];
                 newMarker(lat, lng, map, maps, forecast, infowindow)
-            } else if(timeFormats['dayOfWeek'] === 'Tomorrow') {
+            } else if(timeFormats['dayOfWeek'] === 'Tomorrow' && (tomorrowStartTime + additionalHours) < 48) {
                 forecast = data['data']['hourly']['data'][tomorrowStartTime + additionalHours];
                 newMarker(lat, lng, map, maps, forecast, infowindow)
             } else {
                 forecast = data['data']['daily']['data'][timeFormats['dayInt']];
-                newMarker(lat, lng, map, maps, forecast, infowindow)
+                newMarker(lat, lng, map, maps, forecast, infowindow, temp)
             }
         });
     }
 
+    //missing wind, sleet, fog.
     function judgeForecast(forecast) {
-        switch (forecast['summary']) {
-            case 'Cloudy':
+        switch (forecast['icon']) {
+            case 'cloudy':
                 return 'images/cloudy.png';
-            case 'Partly Cloudy':
+            case 'partly-cloudy-day':
                 return 'images/partlycloudy.png';
-            case 'Mostly Cloudy':
+            case 'partly-cloudy-night':
                 return 'images/partlycloudy.png';
-            case 'Clear':
+            case 'clear-day':
                 return 'images/sunny.png';
-            case 'Sunny':
+            case 'clear-night':
                 return 'images/sunny.png';
-            case 'Light Rain':
-                return 'images/lightrain.png';
-            case 'Mix':
-                return 'images/mix.png';
-            case 'Severe':
+            case 'rain':
+                return 'images/rain.png';
+            case 'hail':
+                return 'images/hail.png';
+            case 'tornado':
                 return 'images/severe.png';
-            case 'Snow':
+            case 'snow':
                 return 'images/snow.png';
-            case 'Thunderstorm':
+            case 'thunderstorm':
                 return 'images/thunderstorm.png';
         }
     }
 
-    function getForecastContent(forecast) {
+    function getForecastContent(forecast, temp) {
         var content = '';
         content += 'Summary: ' + forecast['summary'] + '<br>';
-        content += 'Temperature: ' + Math.floor(forecast['temperature']) + ' &#8457<br>';
+        if(temp == true) {
+            content += 'Temperature: ' + Math.floor(forecast['temperature']) + ' &#8457<br>';
+        }
         content += 'Wind Speed: ' + forecast['windSpeed'] + ' MPH<br>';
         content += 'Humidity: ' + forecast['humidity'] * 100 + ' %';
         return content;
@@ -115,7 +120,7 @@ function MapsService(TimeService, WeatherService) {
             lng = routePoints[j].lng();
 
             accruedTripTime += timeBetweenMarkers;
-            getWeather(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime);
+            getWeather(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime, markerCount);
         }
     }
 
