@@ -8,11 +8,12 @@ function MapsService(TimeService, WeatherService) {
     var currentMarkers = [];
 
     var newMarker = function(lat, lng, map, maps, forecast, infowindow) {
+        var markerContent = getForecastContent(forecast);
         var weatherIcon = judgeForecast(forecast);
         var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 35)};
         var newMarker = new maps.Marker({position: {lat, lng}, map: map, icon: icon});
         newMarker.addListener('click', function() {
-            infowindow.setOptions({content: forecast['summary']});
+            infowindow.setOptions({content: markerContent});
             infowindow.open(map, newMarker);
         });
         currentMarkers.push(newMarker);
@@ -40,11 +41,38 @@ function MapsService(TimeService, WeatherService) {
     }
 
     var judgeForecast = function(forecast) {
-        if(forecast['summary'] === 'Thunderstorm') {
-            return 'images/redmarker.png';
-        } else {
-            return 'images/pc.png';
+        switch (forecast['summary']) {
+            case 'Cloudy':
+                return 'images/cloudy.png';
+            case 'Partly Cloudy':
+                return 'images/partlycloudy.png';
+            case 'Mostly Cloudy':
+                return 'images/partlycloudy.png';
+            case 'Clear':
+                return 'images/sunny.png';
+            case 'Sunny':
+                return 'images/sunny.png';
+            case 'Light Rain':
+                return 'images/lightrain.png';
+            case 'Mix':
+                return 'images/mix.png';
+            case 'Severe':
+                return 'images/severe.png';
+            case 'Snow':
+                return 'images/snow.png';
+            case 'Thunderstorm':
+                return 'images/thunderstorm.png';
         }
+    }
+
+    var getForecastContent = function(forecast) {
+        var content = '';
+        content += 'Summary: ' + forecast['summary'] + '<br>';
+        content += 'Temperature: ' + Math.floor(forecast['temperature']) + ' &#8457<br>';
+        content += 'Wind Speed: ' + forecast['windSpeed'] + ' MPH<br>';
+        content += 'Humidity: ' + forecast['humidity'] * 100 + ' %';
+
+        return content;
     }
 
     var toMiles = function(meters) {

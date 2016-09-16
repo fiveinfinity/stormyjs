@@ -1,5 +1,4 @@
 html, body {
- height: 100%;
  margin: 0;
  margin-bottom: 40px;
 }
@@ -10,8 +9,6 @@ html, body {
  width: 90%;
  margin-left: 10%;
  position: absolute;
- top: 0;
- left: 0;
 }
 
 .logo {
