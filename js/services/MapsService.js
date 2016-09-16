@@ -7,7 +7,7 @@ MapsService.$inject = ['TimeService', 'WeatherService'];
 function MapsService(TimeService, WeatherService) {
     var currentMarkers = [];
 
-    var newMarker = function(lat, lng, map, maps, forecast, infowindow) {
+    function newMarker(lat, lng, map, maps, forecast, infowindow) {
         var markerContent = getForecastContent(forecast);
         var weatherIcon = judgeForecast(forecast);
         var icon = {url: weatherIcon, scaledSize: new maps.Size(35, 35)};
@@ -19,7 +19,7 @@ function MapsService(TimeService, WeatherService) {
         currentMarkers.push(newMarker);
     }
 
-    var getWeather = function(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime) {
+    function getWeather(lat, lng, timeFormats, map, maps, infowindow, accruedTripTime) {
         var forecast;
         var additionalHours = TimeService.getAccruedTripHours(accruedTripTime);
         var todayStartTime = hoursIntoFutureFromToday(timeFormats);
@@ -40,7 +40,7 @@ function MapsService(TimeService, WeatherService) {
         });
     }
 
-    var judgeForecast = function(forecast) {
+    function judgeForecast(forecast) {
         switch (forecast['summary']) {
             case 'Cloudy':
                 return 'images/cloudy.png';
@@ -65,21 +65,20 @@ function MapsService(TimeService, WeatherService) {
         }
     }
 
-    var getForecastContent = function(forecast) {
+    function getForecastContent(forecast) {
         var content = '';
         content += 'Summary: ' + forecast['summary'] + '<br>';
         content += 'Temperature: ' + Math.floor(forecast['temperature']) + ' &#8457<br>';
         content += 'Wind Speed: ' + forecast['windSpeed'] + ' MPH<br>';
         content += 'Humidity: ' + forecast['humidity'] * 100 + ' %';
-
         return content;
     }
 
-    var toMiles = function(meters) {
+    function toMiles(meters) {
         return Math.floor(meters/1609);
     }
 
-    var getCadence = function(miles) {
+    function getCadence(miles) {
         if(miles < 100) {
             return 90;
         } else if(miles > 100 && miles < 500) {
@@ -91,12 +90,12 @@ function MapsService(TimeService, WeatherService) {
         }
     }
 
-    var hoursIntoFutureFromToday = function(timeFormats) {
+    function hoursIntoFutureFromToday(timeFormats) {
         var currentHour = new Date(Date.now()).getHours();
         return (timeFormats['militaryTime'] - currentHour)-1;
     }
 
-    var hoursIntoFutureFromTomorrow = function(timeFormats) {
+    function hoursIntoFutureFromTomorrow(timeFormats) {
         var currentHour = new Date(Date.now()).getHours();
         return ((timeFormats['militaryTime'] + 24) - currentHour)-1;
     }

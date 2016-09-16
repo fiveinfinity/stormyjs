@@ -4,7 +4,7 @@ angular
 
 function TimeService() {
     //given the day integer, returns the day of the week.
-    var getDay = function(int) {
+    function getDay(int) {
         switch (int) {
             case 0:
                 day = "Sunday";
@@ -31,12 +31,12 @@ function TimeService() {
     }
 
     // takes the hour and period and returns military time.
-    var militaryTime = function(hour, period) {
+    function militaryTime(hour, period) {
         return period === "AM" ? parseInt(hour) : (parseInt(hour) + 12);
     }
 
     //takes UTC and returns 'YYYY-MM-DD' string. Need to do this to include the future time for trip as a new UTC.
-    var dateParser = function(UTCdate) {
+    function dateParser(UTCdate) {
         var day = UTCdate.getDate();
         var month = UTCdate.getMonth();
         var year = UTCdate.getFullYear();
