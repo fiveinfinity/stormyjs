@@ -75,7 +75,7 @@ function MapsService(TimeService, WeatherService) {
             content += 'Temperature: ' + Math.floor(forecast['temperature']) + ' &#8457<br>';
         }
         content += 'Wind Speed: ' + forecast['windSpeed'] + ' MPH<br>';
-        content += 'Humidity: ' + forecast['humidity'] * 100 + ' %';
+        content += 'Humidity: ' + Math.floor(forecast['humidity'] * 100) + ' %';
         return content;
     }
 

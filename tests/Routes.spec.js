@@ -67,5 +67,20 @@ describe('TimeService', function() {
 
   it('should return the correct additional hours to be added to the trip', function() {
     expect(TimeService.getAccruedTripHours(240)).toEqual(4);
-  })
+  });
+});
+
+describe('MapsService', function() {
+  beforeEach(module('app'));
+  var MapsService;
+
+  beforeEach(inject(function($injector) {
+    MapsService = $injector.get('MapsService');
+  }));
+
+  it('should return the direction parameters for Google Maps API directions', function() {
+    expect(MapsService.directionParams('Minneapolis', 'Barbados',
+      {'TravelMode': {'DRIVING': 'driving, duh'}, 'TrafficModel': {'PESSIMISTIC': 'not looking good...'}},
+      'formattedTimes')['destination']).toEqual('Barbados');
+  });
 });
