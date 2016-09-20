@@ -44,3 +44,28 @@ describe('WeatherService', function() {
     });
   });
 });
+
+describe('TimeService', function() {
+  beforeEach(module('app'));
+  var today = new Date(Date.now());
+  var TimeService;
+
+  beforeEach(inject(function($injector) {
+    TimeService = $injector.get('TimeService');
+  }));
+
+  it('should return the next seven days', function() {
+    if (TimeService.nextSevenDays()['Today'][0] === today) {
+      done();
+    }
+  });
+
+  it('should return different time formats', function() {
+    expect(TimeService.allTimeFormats(2, 'PM', {'Today': [today, 0]}, 'Today')['militaryTime'])
+      .toEqual(14);
+  });
+
+  it('should return the correct additional hours to be added to the trip', function() {
+    expect(TimeService.getAccruedTripHours(240)).toEqual(4);
+  })
+});

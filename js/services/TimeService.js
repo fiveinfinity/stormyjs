@@ -81,7 +81,7 @@ function TimeService() {
 
     this.getAccruedTripHours = function(interval) {
         hourIncrements = 0;
-        while (interval > 60) {
+        while (interval >= 60) {
             interval -= 60;
             hourIncrements++;
         }
