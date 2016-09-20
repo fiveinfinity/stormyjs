@@ -1,45 +1,28 @@
-// describe('Routes', function() {
-//   var $state;
-//
-//   beforeEach(module('app'));
-//   beforeEach(inject(function($injector) {
-//     $state = $injector.get('$state');
-//   }));
-//
-//   describe('Home', function() {
-//     var state;
-//
-//     it('should have the correct template', function() {
-//       state = $state.get('home');
-//       expect(state.templateUrl).toEqual('./js/views/home.html');
-//     });
-//
-//     it('should use the correct Controller', function() {
-//       expect(state.controller).toEqual('HomeController as ctrl');
-//     });
-//
-//     it('should have the correct URL', function() {
-//       expect(state.url).toEqual('/');
-//     });
-//   });
-//
-//   describe('Profiles', function() {
-//     var state;
-//
-//     it('should have the correct template', function() {
-//       state = $state.get('home.profile');
-//       expect(state.views['profile@home'].templateUrl).toEqual('./js/views/profile.html');
-//     });
-//
-//     it('should use the correct Controller', function() {
-//       expect(state.views['profile@home'].controller).toEqual('ProfileController as ctrl');
-//     });
-//
-//     it('should have the correct URL', function() {
-//       expect(state.url).toEqual('profile/:id');
-//     });
-//   });
-// });
+describe('Routes', function() {
+  var $state;
+
+  beforeEach(module('app'));
+  beforeEach(inject(function($injector) {
+    $state = $injector.get('$state');
+  }));
+
+  describe('Home', function() {
+    var state;
+
+    it('should have the correct template', function() {
+      state = $state.get('home');
+      expect(state.templateUrl).toEqual('./js/views/home.html');
+    });
+
+    it('should use the correct Controller', function() {
+      expect(state.controller).toEqual('HomeController as home');
+    });
+
+    it('should have the correct URL', function() {
+      expect(state.url).toEqual('/');
+    });
+  });
+});
 //
 // describe('DateService', function() {
 //   beforeEach(module('app'));
